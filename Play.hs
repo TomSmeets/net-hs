@@ -1,10 +1,12 @@
 module Play where
 
 import qualified Data.Map as M
-import Data.Map (Map)
 import qualified Graphics.Gloss as G
-import Graphics.Gloss (Picture)
+
 import Common
+import Data.Map (Map)
+import Graphics.Gloss (Picture)
+import System.Random
 
 data Tile = Tile Bool Bool Bool Bool deriving (Eq, Ord, Show)
 data Grid = Grid Size (Map Pos Tile)
@@ -30,5 +32,11 @@ tile_picture t = G.pictures [ G.rectangleWire 1.0 1.0, G.color G.blue . G.pictur
     line (Dir x y) = G.line [(0, 0), (fromIntegral x / 2, fromIntegral y / 2)]
 
 
-grid_shuffle :: Grid -> Grid
-grid_shuffle (Grid s m) = Grid s $ M.map rot_left m
+iterateN :: Int -> (a -> a) -> a -> a
+iterateN 0 f = id
+iterateN n f = (iterateN (n-1) f) . f
+
+grid_shuffle :: RandomGen g => g -> Grid -> Grid
+grid_shuffle g (Grid s m) = Grid s $ M.fromList $ zipWith (\(k, v) r -> (k, iterateN r rot_left v)) (M.toList m) rs
+  where
+    rs = randomRs (0, 3) g
