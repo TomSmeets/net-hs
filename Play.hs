@@ -24,10 +24,10 @@ tile_dirs :: Tile -> [Dir]
 tile_dirs (Tile a b c d) = map snd $ filter fst $ zip [a, b, c, d] dirs
 
 grid_picture :: Grid -> Picture
-grid_picture (Grid s m) = G.pictures $ map (\p@(Pos x y) -> G.translate (fromIntegral x) (fromIntegral y) $ tile_picture $ (m M.! p)) (size_points_inside s)
+grid_picture (Grid s@(Size w h) m) = G.pictures $ map (\p@(Pos x y) -> G.translate (fromIntegral x) (fromIntegral y) $ tile_picture $ (m M.! p)) (size_points_inside s)
 
 tile_picture :: Tile -> Picture
-tile_picture t = G.pictures [ G.rectangleWire 1.0 1.0, G.color G.blue . G.pictures . map line . tile_dirs $ t ]
+tile_picture t = G.pictures [ G.color (G.greyN 0.8) $ G.rectangleWire 1.0 1.0, G.color G.blue . G.pictures . map line . tile_dirs $ t ]
   where
     line (Dir x y) = G.line [(0, 0), (fromIntegral x / 2, fromIntegral y / 2)]
 

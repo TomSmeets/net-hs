@@ -48,13 +48,11 @@ grid_show (Grid (Size w h) m) = unlines $ map (\y -> concat $ map (\x -> check (
         Nothing -> ". "
 
 grid_picture :: Grid -> Picture
-grid_picture (Grid (Size w h) m) = translate (- fromIntegral w / 2) (- fromIntegral h / 2) $ pictures $ map (grid_picture_tile . uncurry Tile) (M.toList m)
+grid_picture (Grid (Size w h) m) = pictures $ map (grid_picture_tile . uncurry Tile) (M.toList m)
 
 grid_picture_tile (Tile (Pos x y) dir)
     = translate (fi x) (fi y)
-    $ pictures [ rectangleWire 0.2 0.2
-               , arr dir
-               ]
+    $ pictures [ arr dir ]
   where
     arr (Dir x y) = line [(0, 0), (fi x, fi y)]
     fi = fromIntegral
