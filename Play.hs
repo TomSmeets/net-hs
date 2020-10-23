@@ -4,7 +4,7 @@ import qualified Data.Map as M
 import Data.Map (Map)
 import qualified Graphics.Gloss as G
 import Graphics.Gloss (Picture)
-import Gen (Dir(Dir), Pos(Pos), Size(Size), dirs)
+import Common
 
 data Tile = Tile Bool Bool Bool Bool deriving (Eq, Ord, Show)
 data Grid = Grid Size (Map Pos Tile)
@@ -20,8 +20,6 @@ rot_right (Tile a b c d) = Tile d a b c
 
 tile_dirs :: Tile -> [Dir]
 tile_dirs (Tile a b c d) = map snd $ filter fst $ zip [a, b, c, d] dirs
-
-size_points_inside (Size w h) = Pos <$> [0..(w-1)] <*> [0..(h-1)]
 
 grid_picture :: Grid -> Picture
 grid_picture (Grid s m) = G.pictures $ map (\p@(Pos x y) -> G.translate (fromIntegral x) (fromIntegral y) $ tile_picture $ (m M.! p)) (size_points_inside s)
