@@ -1,12 +1,7 @@
 module Common where
 
 import qualified Data.Map as M
-import Data.Traversable
-import Debug.Trace
-import Data.Int (Int64)
 import System.Random
-import Graphics.Gloss
-import Data.List
 
 data Dir  = Dir  Int Int deriving (Show, Ord, Eq)
 data Pos  = Pos  Int Int deriving (Show, Ord, Eq)
@@ -35,8 +30,8 @@ shuffle xs g = shuffleL (length xs) xs g
         (idx, g2) = randomR (0, (l-1)) g1
         (y,   ys) = remove idx xs
 
-tailOrLast [x] = [x]
-tailOrLast (x:xs) = xs
+tailOrLast [x]    = [x]
+tailOrLast (_:xs) = xs
 
 undupes [] = []
 undupes [x] = [x]

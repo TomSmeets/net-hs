@@ -5,10 +5,6 @@ import qualified Play
 import qualified Data.Map as M
 
 import Common
-import Data.Int (Int64)
-import Data.List
-import Data.Traversable
-import Debug.Trace
 import Graphics.Gloss
 import Graphics.Gloss.Interface.Pure.Game
 import System.Random
@@ -39,7 +35,7 @@ game_state_size (Gen  ((Gen.Grid s _):_)) = s
 game_state_size (Play (Play.Grid s _))    = s
 
 gen2play :: Gen.Grid -> Play.Grid
-gen2play g@(Gen.Grid size m) = Play.Grid size $ M.fromList $ map (\p -> (p, gen2play_tile p g)) (size_points_inside size)
+gen2play g@(Gen.Grid size _) = Play.Grid size $ M.fromList $ map (\p -> (p, gen2play_tile p g)) (size_points_inside size)
 
 gen2play_tile :: Pos -> Gen.Grid -> Play.Tile
 gen2play_tile pos (Gen.Grid size m) = Play.mkTile $ zipWith (||) self around
@@ -55,16 +51,16 @@ gen2play_tile pos (Gen.Grid size m) = Play.mkTile $ zipWith (||) self around
                  ) $ map (pos_wrap size . (`dir_add` pos)) dirs
 
 state_update game@Game { game_state = Gen [x]    } = game { game_state = Play (gen2play x) }
-state_update game@Game { game_state = Gen (x:xs) } = game { game_state = Gen xs }
-state_update game@Game { game_state = Play g     } = game
+state_update game@Game { game_state = Gen (_:xs) } = game { game_state = Gen xs }
+state_update game@Game { game_state = Play _     } = game
 
 solve_step r (Play.Grid (Size w h) m) = Play.Grid (Size w h) m2
   where
     (x, r2) = randomR (0, w-1) r
-    (y, r3) = randomR (0, h-1) r2
+    (y, _)  = randomR (0, h-1) r2
     m2 = M.adjust Play.rot_left (Pos x y) m
 
-state_display Game { game_state = (Gen  (x:xs)) } = Gen.grid_picture x
+state_display Game { game_state = (Gen  (x:_)) } = Gen.grid_picture x
 state_display game@Game { game_state = (Play s) } = pictures [ display_mouse game, Play.grid_picture s ]
 
 display_mouse Game { game_mouse = Just (Pos x y) } = translate (fromIntegral x) (fromIntegral y) $ color (greyN 0.9) $ rectangleSolid 1 1
@@ -78,7 +74,7 @@ event (EventKey (Char 'r') Down _ _) game@Game { game_state = Play g } = let
     (r2, r3) = split (game_rand game)
   in game { game_rand = r3, game_state = Play (Play.grid_shuffle r2 g) }
 
-event (EventKey (MouseButton dir) Down _ (mx, my)) game@(Game { game_rand=r, game_state = Play g }) = let
+event (EventKey (MouseButton dir) Down _ (mx, my)) game@(Game { game_state = Play g }) = let
     (Play.Grid (Size w h) m) = g
     pos = vp_unproject (game_view game) (mx, my)
     do_rot = case dir of
@@ -86,11 +82,11 @@ event (EventKey (MouseButton dir) Down _ (mx, my)) game@(Game { game_rand=r, gam
         RightButton -> Play.rot_left
         _           -> id
     m2 = M.adjust do_rot pos m
-    (r2, r3) = split r
-  in game { game_rand = r3, game_state = Play $ Play.Grid (Size w h) m2 }
+  in game { game_state = Play $ Play.Grid (Size w h) m2 }
 
 event _ g = g
 
+main :: IO ()
 main = do
     gen <- newStdGen
     let s    = Size 6 6

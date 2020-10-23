@@ -1,12 +1,9 @@
 module Gen where
 
 import qualified Data.Map as M
-import Data.Traversable
-import Debug.Trace
-import Data.Int (Int64)
+
 import System.Random
 import Graphics.Gloss
-import Data.List
 import Common
 
 data Tile = Tile Pos Dir
@@ -43,12 +40,12 @@ grid_gen s g = grid_gen_step_more [Tile (start_pos s) (Dir 0 0)] (grid_empty s) 
 grid_show :: Grid -> String
 grid_show (Grid (Size w h) m) = unlines $ map (\y -> concat $ map (\x -> check (Pos x y) ) [0..(w-1)]) [0..(h-1)]
   where
-    check p@(Pos x y) = case M.lookup p m of
+    check p = case M.lookup p m of
         Just d  -> (dir_to_char d : " ")
         Nothing -> ". "
 
 grid_picture :: Grid -> Picture
-grid_picture (Grid (Size w h) m) = pictures $ map (grid_picture_tile . uncurry Tile) (M.toList m)
+grid_picture (Grid _ m) = pictures $ map (grid_picture_tile . uncurry Tile) (M.toList m)
 
 grid_picture_tile (Tile (Pos x y) dir)
     = translate (fi x) (fi y)
@@ -56,5 +53,3 @@ grid_picture_tile (Tile (Pos x y) dir)
   where
     arr (Dir x y) = line [(0, 0), (fi x, fi y)]
     fi = fromIntegral
-
----------------------------------------
