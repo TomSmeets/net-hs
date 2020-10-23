@@ -43,4 +43,4 @@ main = do
     gen <- newStdGen
     let s    = Gen.Size 20 20
     let grid = undupes $ Gen.grid_gen s gen
-    simulate (InWindow "hsnet" (800, 600) (0, 0)) white 60 grid (scale 100 100 . Play.grid_picture . Play.shuffle . gen2play . head) (\_ _ g -> tailOrLast g)
+    simulate (InWindow "hsnet" (800, 600) (0, 0)) white 60 grid (scale 100 100 . Play.grid_picture . Play.grid_shuffle . gen2play . head) (\_ _ g -> tailOrLast g)
