@@ -23,9 +23,11 @@ data State = Gen [Gen.Grid] | Play (Play.Grid)
 
 data Viewport = Viewport Float Float Float
 
-vp_from_state (w, h) state = Viewport s dx dy
+vp_from_state (w, h) state = Viewport (min sa sb) dx dy
   where
-    s  = h / fromIntegral gh
+    sa  = w / fromIntegral gw
+    sb  = h / fromIntegral gh
+
     dx = - fromIntegral gw / 2 + 0.5
     dy = - fromIntegral gh / 2 + 0.5
     (Size gw gh) = game_state_size state
