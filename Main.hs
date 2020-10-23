@@ -1,6 +1,7 @@
 module Main where
 
 import qualified Gen
+import qualified Play
 
 import qualified Data.Map as M
 import Data.Traversable
@@ -23,4 +24,3 @@ main = do
     let s    = Gen.Size 20 20
     let grid = undupes $ Gen.grid_gen s gen
     simulate (InWindow "hsnet" (800, 600) (0, 0)) white 60 grid (scale 100 100 . Gen.grid_picture . head) (\_ _ g -> tailOrLast g)
-
