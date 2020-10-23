@@ -1,3 +1,5 @@
+module Gen where
+
 import qualified Data.Map as M
 import Data.Traversable
 import Debug.Trace
@@ -114,17 +116,3 @@ grid_picture_tile (Tile (Pos x y) dir)
     fi = fromIntegral
 
 ---------------------------------------
-
-tailOrLast [x] = [x]
-tailOrLast (x:xs) = xs
-
-undupes [] = []
-undupes [x] = [x]
-undupes (x1:x2:xs) | x1 == x2  = undupes (x1:xs)
-                   | otherwise = x1:undupes (x2:xs)
-
-main = do
-    gen <- newStdGen
-    let s    = Size 20 20
-    let grid = undupes $ grid_gen s gen
-    simulate (InWindow "hsnet" (800, 600) (0, 0)) white 60 grid (scale 100 100 . grid_picture . head) (\_ _ g -> tailOrLast g)
