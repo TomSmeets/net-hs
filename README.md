@@ -7,8 +7,8 @@ Note that this implementation is not finished, there is no check to see if you w
 * Left  click on a tile to rotate it right
 * Press Escape to exit the game
 
-# LICENCE
-
-This projcet is distributed under the MIT licence, see `LICENCE.txt` for more info.
-
 ![Preview](./preview.png)
+
+# License
+
+This projcet is distributed under the MIT license, see `LICENSE.txt` for more info.
