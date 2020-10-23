@@ -3,3 +3,5 @@ Implementation of the game [Net](https://www.chiark.greenend.org.uk/~sgtatham/pu
 * Press 'r' to randomly rotate all tiles
 * right click on a tile to rotate it left
 * left  click on a tile to rotate it right
+
+![Preview](./preview.png)
