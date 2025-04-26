@@ -1,0 +1,19 @@
+cabal-version:      3.0
+name:               hsnet
+version:            0.1.0.0
+license:            MIT
+license-file:       LICENSE.txt
+author:             Tom Smeets
+maintainer:         tom@tsmeets.nl
+category:           Game
+build-type:         Simple
+
+common warnings
+    ghc-options: -Wall
+
+executable hsnet
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base, random, containers, gloss
+    hs-source-dirs:   src
+    default-language: Haskell2010
