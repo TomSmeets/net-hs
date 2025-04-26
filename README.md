@@ -9,6 +9,15 @@ Note that this implementation is not finished, there is no check to see if you w
 
 ![Preview](./preview.png)
 
+# Building
+
+Build using `stack`:
+
+```bash
+stack build
+stack run
+```
+
 # License
 
 This projcet is distributed under the MIT license, see `LICENSE.txt` for more info.
